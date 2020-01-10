@@ -243,6 +243,14 @@ def get_index_ret(code, freq='6M'):
     return ret
 
 def clean_index_quote(save_cols=('close',), save_ori=False):
+    """
+       input: 
+	   从wind终端下载的基金/指数日频行情数据文件，文件名格式：'基金代码'.xls
+       output:
+           根据close_price计算日收益率, 根据save_cols参数决定所要原始的数据列；
+	   结果存储为csv，通过save_ori关键字参数决定是否保留原始xls文件，默认值为False
+	   存储结果见quote_data文件夹
+    """		    
     quote_dir = os.path.join(wdir, 'quote_data')
     files = [f for f in os.listdir(quote_dir) if f.endswith('xls')]
     col_map = {
@@ -272,6 +280,14 @@ def clean_index_quote(save_cols=('close',), save_ori=False):
             os.remove(os.path.join(quote_dir, f))
 
 def clean_fund_holding(save_ori=True):
+    """
+       input: 
+	   从wind终端下载的基金持仓明细文件，文件名格式：'基金代码'持股.csv
+       output:
+	   结果存储为xlsx，每个sheet名为对应持仓报告期日期，
+	   通过save_ori关键字参数决定是否保留原始csv文件，默认值为True
+	   存储结果见fund_holding文件夹
+    """
     fund_dir = os.path.join(wdir, 'fund_holding')
     files = [f for f in os.listdir(fund_dir) if '持股' in f]
     for f in files: 
@@ -323,19 +339,22 @@ def read_fund_holding(code, index=None, bm_stock_wt=0.80):
     return stock_weight, asset_weight
 
 def brinson_attribution():
-    fund_code = '161810.OF'
-    bond_benchmark = '000012.SH'
-    stock_benchmark = '000300.SH'
-    bm_stock_wt = 0.80 
-    version = 2 # 1--BHB; 2--BF
-    freq = '6M'
-    verbose = True #是否存储单层brinson归因结果
+    fund_code = '161810.OF'        #基金代码
+    bond_benchmark = '000012.SH'   #基金对应基准债券指数代码
+    stock_benchmark = '000300.SH'  #基金对应基准股票指数基准代码
+    bm_stock_wt = 0.80             #基准股票指数比例
+    version = 2               #brinson归因模型版本 1--BHB; 2--BF
+    freq = '6M'               #归因频率，与所选基金持仓频率对应，默认选择基金的半年报和年报
+    verbose = True        #是否存储单层brinson归因结果（股票行业配置和选股效应）
     
-    clean_index_quote()
-    clean_fund_holding()
-    stock_weight, asset_weight = read_fund_holding(fund_code, None, bm_stock_wt)
+    clean_index_quote()    #清洗并计算基金/基准指数日收益率
+    clean_fund_holding()   #清洗基金持仓文件
+    stock_weight, asset_weight = read_fund_holding(fund_code, None, bm_stock_wt) 
     res = brinson_attr_asset(stock_weight, asset_weight, fund_code, stock_benchmark, 
                              bond_benchmark, freq, version, verbose)
+			    
+    if not os.path.exists(os.path.join(wdir, 'brinson_result')):
+	os.mkdir(os.path.join(wdir, 'brinson_result'))
     res.to_csv(os.path.join(wdir, 'brinson_result', f'{fund_code}.csv'), 
                encoding='gbk')
     print(f'Finish for {fund_code}.')
