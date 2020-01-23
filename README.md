@@ -13,6 +13,25 @@ brinson模型是基金组合业绩归因的重要工具，借助基金具体的�
 二.模型细节
 ------
 
+### 1.单层模型
+假定组合中的证券全部属于L个行业。以W<sub>i</sub>表示基准组合中行业i的权重，w<sub>i</sub>表示实际组合中行业i的权重；b<sub>i</sub>表示基准组合中行业i的收益，r<sub>i</sub>表示实际组合中行业i的收益。
+
+![](https://github.com/ShiliangZhang-nku/Brinson-Attribution/blob/master/pics/brinson.png)
+
+图中的4个组合分别为基准组合P<sub>1</sub>，主动配置组合P<sub>2</sub>，主动选择组合P<sub>3</sub>，实际投资组合P<sub>4</sub>。
+
+超额收益表示为实际组合P<sub>4</sub>与基准组合P<sub>1</sub>之间的收益差额R<sub>e</sub>=P<sub>4</sub>-P<sub>1</sub>。基于4个组合，可以将R<sub>e</sub>分解为资产配置收益（AR）、选择收益（SR）和交互收益（IR）。
+
+![](https://github.com/ShiliangZhang-nku/Brinson-Attribution/blob/master/pics/AR_SR_IR.png)
+
+AR=超额权重*基准资产收益
+
+SR=基准权重*资产超额收益
+
+IR=超额权重*超额收益率
+
+
+
 三.框架结构
 ------
 
