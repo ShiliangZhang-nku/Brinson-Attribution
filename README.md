@@ -13,7 +13,10 @@ brinson模型是基金组合业绩归因的重要工具，借助基金具体的�
 二.模型细节
 ------
 
-### 1.单层模型
+## 1.单层模型
+### BHB模型 
+Brinson、Hood和Beebower（1986）提出Brinson模型的经典版本，记为BHB模型，该模型将组合的超额收益分解为**资产配置收益**、**选择收益**和**交互收益**。
+
 假定组合中的证券全部属于L个行业。以W<sub>i</sub>表示基准组合中行业i的权重，w<sub>i</sub>表示实际组合中行业i的权重；b<sub>i</sub>表示基准组合中行业i的收益，r<sub>i</sub>表示实际组合中行业i的收益。
 
 ![](https://github.com/ShiliangZhang-nku/Brinson-Attribution/blob/master/pics/brinson.png)
@@ -24,11 +27,7 @@ brinson模型是基金组合业绩归因的重要工具，借助基金具体的�
 
 ![](https://github.com/ShiliangZhang-nku/Brinson-Attribution/blob/master/pics/AR_SR_IR.png)
 
-AR=超额权重*基准资产收益
 
-SR=基准权重*资产超额收益
-
-IR=超额权重*超额收益率
 
 
 
